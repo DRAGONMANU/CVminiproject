@@ -110,7 +110,7 @@ def getMin(D, i, j, lamdaA):
 
 w = 25
 g = 25
-batchSize = 50
+batchSize = 200
 lamdaS = 200
 lamdaA = 80
 bss = 3
