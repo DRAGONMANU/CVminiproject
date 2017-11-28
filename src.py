@@ -7,7 +7,7 @@ inputFile = "vidfin.mp4"    # input video
 v = 4                       # speed
 
 
-def CmList(fi, fjList):
+def costlist(fi, fjList):
 
     d = np.sqrt(fi.shape[0] * fi.shape[0] + fi.shape[1] * fi.shape[1])
     tc = 0.1 * d
@@ -113,7 +113,6 @@ g = 25
 batchSize = 200
 lamdaS = 200
 lamdaA = 80
-bss = 3
 
 outptFile = 'hyper' + str(v) + '.mp4'
 cap = cv2.VideoCapture(inputFile)
@@ -133,7 +132,7 @@ while 1:
         for i in xrange(0, batchSize - w):
             fi = tempneigh[i, :, :]
             fjList = tempneigh[range(i + 1, i + w + 1), :, :]
-            MCList.append(CmList(fi, fjList))
+            MCList.append(costlist(fi, fjList))
 
         tempneigh[range(0, w), :, :] = tempneigh[range(batchSize - w, batchSize), :, :]
         it = w
@@ -142,7 +141,7 @@ while 1:
     it += 1
     temp = 0
     ret, frame = cap.read()
-    while temp < bss and ret == False:
+    while temp < 3 and ret == False:
         ret, frame = cap.read()
         temp += 1
     print fCount
@@ -154,7 +153,7 @@ motionCostArr = np.zeros(w)
 for i in xrange(0, it - w):
     fi = tempneigh[i, :, :]
     fjList = tempneigh[range(i + 1, i + w + 1), :, :]
-    toAppend = CmList(fi, fjList)
+    toAppend = costlist(fi, fjList)
     MCList.append(toAppend)
 
 # Initialization
@@ -209,7 +208,7 @@ while ret and it < len(p):
         it += 1
     temp = 0
     ret, frame = cap.read()
-    while temp < bss and ret == False:
+    while temp < 3 and ret == False:
         ret, frame = cap.read()
         temp += 1
     print fCount
